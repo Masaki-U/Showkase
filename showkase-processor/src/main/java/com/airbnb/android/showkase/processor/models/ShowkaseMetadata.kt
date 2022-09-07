@@ -191,6 +191,7 @@ internal fun getShowkaseMetadata(
         val showkaseGroup = getShowkaseGroup(
             annotation.value.group,
             commonMetadata.enclosingClass,
+            commonMetadata.moduleName
         )
         val isDefaultStyle = annotation.value.defaultStyle
         val showkaseStyleName = getShowkaseStyleName(annotation.value.styleName, isDefaultStyle)
@@ -271,6 +272,7 @@ internal fun getShowkaseMetadataFromPreview(
         val showkaseGroup = getShowkaseGroup(
             annotation.getAsString("group"),
             commonMetadata.enclosingClass,
+            commonMetadata.moduleName
         )
 
         val width = annotation.getAsInt("widthDp")
@@ -327,7 +329,9 @@ internal fun getShowkaseColorMetadata(
     val commonMetadata = element.extractCommonMetadata(showkaseValidator)
     val showkaseName = getShowkaseName(showkaseColorAnnotation.name, element.name)
     val showkaseGroup = getShowkaseGroup(
-        showkaseColorAnnotation.group, commonMetadata.enclosingClass,
+        showkaseColorAnnotation.group,
+        commonMetadata.enclosingClass,
+        commonMetadata.moduleName
     )
 
     return ShowkaseMetadata.Color(
@@ -358,6 +362,7 @@ internal fun getShowkaseTypographyMetadata(
     val showkaseGroup = getShowkaseGroup(
         showkaseTypographyAnnotation.group,
         commonMetadata.enclosingClass,
+        commonMetadata.moduleName
     )
 
     return ShowkaseMetadata.Typography(
@@ -452,12 +457,13 @@ internal fun getShowkaseName(
 internal fun getShowkaseGroup(
     showkaseGroupFromAnnotation: String,
     enclosingClass: XTypeElement?,
+    moduleName: String
 ) = when {
     showkaseGroupFromAnnotation.isNotBlank() -> showkaseGroupFromAnnotation
     showkaseGroupFromAnnotation.isBlank() && enclosingClass != null -> enclosingClass.name.capitalize(
         Locale.getDefault()
     )
-    else -> "Default Group"
+    else -> moduleName
 }
 
 internal fun getShowkaseStyleName(
