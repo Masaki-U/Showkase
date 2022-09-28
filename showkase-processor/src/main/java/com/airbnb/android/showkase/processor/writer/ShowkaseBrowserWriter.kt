@@ -108,6 +108,7 @@ internal class ShowkaseBrowserWriter(private val environment: XProcessingEnv) {
 
     private fun CodeBlock.Builder.addProviderComponent(withParameterMetadata: ShowkaseMetadata.Component) {
         addLineBreak()
+        unindent()
         add(
             "%T()",
             withParameterMetadata.previewParameterProviderType
